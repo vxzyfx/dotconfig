@@ -19,6 +19,8 @@ return {
        :lint("clang-tidy")
       ft("go"):fmt("lsp")
         :append("golines")
+      ft("json"):fmt("jq")
+      ft("zig"):fmt("zigfmt")
       ft("typescript,javascript,typescriptreact"):fmt("prettierd")
       ft("rust"):fmt("rustfmt")
       require("guard").setup({
