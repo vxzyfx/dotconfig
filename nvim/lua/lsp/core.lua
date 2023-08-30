@@ -11,20 +11,20 @@ return {
   },
     -- formatters
   {
-    "jose-elias-alvarez/null-ls.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    opts = function()
-      local nls = require("null-ls")
-      return {
-        root_dir = require("null-ls.utils").root_pattern(".null-ls-root", "Makefile", ".git"),
-        sources = {
-          nls.builtins.formatting.fish_indent,
-          nls.builtins.diagnostics.fish,
-          nls.builtins.formatting.stylua,
-          nls.builtins.formatting.shfmt,
-          -- nls.builtins.diagnostics.flake8,
-        },
-      }
+    "nvimdev/guard.nvim",
+    event = { "VeryLazy"},
+    config = function()
+      local ft = require("guard.filetype")
+      ft("c"):fmt("clang-format")
+       :lint("clang-tidy")
+      ft("go"):fmt("lsp")
+        :append("golines")
+      ft("typescript,javascript,typescriptreact"):fmt("prettierd")
+      ft("rust"):fmt("rustfmt")
+      require("guard").setup({
+        fmt_on_save = false,
+        lsp_as_default_formatter = true,
+      })
     end,
   },
 

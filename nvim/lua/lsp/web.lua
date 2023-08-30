@@ -45,24 +45,6 @@ return {
     end,
   },
   {
-    "jose-elias-alvarez/null-ls.nvim",
-    opts = function(_, opts)
-      if type(opts.sources) == "table" then
-        local nls = require("null-ls")
-        local ts = require("typescript.extensions.null-ls.code-actions")
-        vim.list_extend(opts.sources, {
-          ts,
-          nls.builtins.code_actions.eslint,
-          nls.builtins.formatting.eslint,
-          nls.builtins.formatting.prettier,
-          nls.builtins.diagnostics.eslint,
-          nls.builtins.formatting.stylelint,
-          nls.builtins.diagnostics.stylelint,
-        })
-      end
-    end,
-  },
-  {
     "vuki656/package-info.nvim",
     requires = "MunifTanjim/nui.nvim",
     opts = {},

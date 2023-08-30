@@ -1,32 +1,7 @@
 local on_attach = function(client, bufnr)
   local handler = require("config.handler")
-  local null_ls = require("null-ls")
   local rt = require("rust-tools")
   local wk = require("which-key")
-  local unwrap = {
-    method = null_ls.methods.DIAGNOSTICS,
-    filetypes = { "rust" },
-    generator = {
-      fn = function(params)
-        local diagnostics = {}
-        for i, line in ipairs(params.content) do
-          local col, end_col = line:find "unwrap()"
-          if col and end_col then
-            table.insert(diagnostics, {
-              row = i,
-              col = col,
-              end_col = end_col,
-              source = "unwrap",
-              message = "hey " .. os.getenv("USER") .. ", don't forget to handle this" ,
-              severity = 2,
-            })
-          end
-        end
-       return diagnostics
-      end,
-    },
-  }
-  null_ls.register(unwrap)
   wk.register({
     ["<leader>"] = { rt.code_action_group.code_action_group, "Rust Action" },
     d = {
