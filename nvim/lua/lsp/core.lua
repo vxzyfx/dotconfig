@@ -2,6 +2,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {},
+    event = { "VeryLazy"},
     config = function(_, opts)
       local lspconfig = require("lspconfig")
       for server, opt in pairs(opts) do
