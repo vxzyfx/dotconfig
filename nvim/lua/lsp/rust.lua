@@ -87,6 +87,7 @@ return {
         },
         server = {
           on_attach = on_attach,
+          cmd = {"rustup", "run", "stable", "rust-analyzer"},
         },
       }
     end

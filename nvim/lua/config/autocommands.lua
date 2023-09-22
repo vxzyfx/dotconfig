@@ -9,3 +9,4 @@ vim.api.nvim_create_autocmd({"BufReadPost"}, {
   end
 })
 
+vim.cmd [[ autocmd BufRead,BufNewFile *.slint set filetype=slint ]]

@@ -10,19 +10,30 @@ return {
       end
     end
   },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = function(_, opts)
+      if type(opts.ensure_installed) == "table" then
+        vim.list_extend(opts.ensure_installed, { "yuck" })
+      end
+    end,
+  },
     -- formatters
   {
     "nvimdev/guard.nvim",
     event = { "VeryLazy"},
+    dependencies = {
+      "nvimdev/guard-collection",
+    },
     config = function()
       local ft = require("guard.filetype")
       ft("c"):fmt("clang-format")
        :lint("clang-tidy")
       ft("go"):fmt("lsp")
         :append("golines")
-      ft("json"):fmt("jq")
-      ft("zig"):fmt("zigfmt")
-      ft("typescript,javascript,typescriptreact"):fmt("prettierd")
+      ft("json"):fmt( {cmd ="jq"})
+      ft("zig"):fmt( {cmd = "zigfmt"})
+      ft("typescript,javascript,typescriptreact"):fmt("prettier")
       ft("rust"):fmt("rustfmt")
       require("guard").setup({
         fmt_on_save = false,
