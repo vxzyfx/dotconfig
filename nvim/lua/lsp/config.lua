@@ -5,6 +5,12 @@ local extra = {
     name = "conding.yml",
     url = "https://ci.coding.net/docs/conf-schema.json",
   },
+  {
+    description = "k8s yaml",
+    fileMatch =  { "*.k8s.yml", "*.k8s.yaml" },
+    name = "k8s",
+    url = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.28.2/all.json",
+  },
 }
 
 return {
