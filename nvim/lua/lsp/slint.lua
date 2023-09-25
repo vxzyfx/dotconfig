@@ -1,9 +1,9 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      slint_lsp = {},
-    },
+    opts = function(_, opts)
+      opts.slint_lsp = {}
+    end
   },
   {
     "nvim-treesitter/nvim-treesitter",

@@ -18,4 +18,16 @@ return {
     optional = true,
     opts = function() require("telescope").load_extension "flutter" end,
   },
+  {
+    "nvim-neotest/neotest",
+    optional = true,
+    dependencies = {
+      "sidlatau/neotest-dart",
+    },
+    opts = {
+      adapters = {
+        ["neotest-dart"] = {},
+      },
+    },
+  },
 }

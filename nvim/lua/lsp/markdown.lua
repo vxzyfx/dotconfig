@@ -1,9 +1,9 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      marksman = {},
-    },
+    opts = function(_, opts)
+      opts.marksman = {}
+    end
   },
   {
     "iamcco/markdown-preview.nvim",

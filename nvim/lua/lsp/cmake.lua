@@ -1,9 +1,9 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      neocmake = {},
-    },
+    opts = function(_, opts)
+      opts.neocmake = {}
+    end
   },
   {
     "nvim-treesitter/nvim-treesitter",

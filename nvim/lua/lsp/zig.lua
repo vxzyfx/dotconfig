@@ -1,9 +1,9 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      zls = {},
-    },
+    opts = function(_, opts)
+      opts.zls = {}
+    end
   },
   {
     "nvim-treesitter/nvim-treesitter",

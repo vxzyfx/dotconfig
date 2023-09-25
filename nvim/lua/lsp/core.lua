@@ -2,7 +2,6 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {},
-    event = { "VeryLazy"},
     config = function(_, opts)
       local lspconfig = require("lspconfig")
       for server, opt in pairs(opts) do
@@ -41,7 +40,18 @@ return {
       })
     end,
   },
-
+  {
+    "Weissle/persistent-breakpoints.nvim",
+    event = {"BufReadPost"},
+    opts = {
+      load_breakpoints_event = {"BufReadPost"},
+    },
+    keys = {
+      { "<leader>dB", function() require("persistent-breakpoints.api").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = "Breakpoint Condition" },
+      { "<leader>db", function() require('persistent-breakpoints.api').toggle_breakpoint() end, desc = "Toggle Breakpoint" },
+      { "<leader>dA", function() require('persistent-breakpoints.api').clear_all_breakpoints() end, desc = "Clean Breakpoint" },
+    },
+  }, 
   {
     "mfussenegger/nvim-dap",
     dependencies = {
@@ -86,17 +96,6 @@ return {
           },
         },
       },
-      {
-        "Weissle/persistent-breakpoints.nvim",
-        opts = {
-          load_breakpoints_event = {"BufReadPost"},
-        },
-        keys = {
-          { "<leader>dB", function() require("persistent-breakpoints.api").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = "Breakpoint Condition" },
-          { "<leader>db", function() require('persistent-breakpoints.api').toggle_breakpoint() end, desc = "Toggle Breakpoint" },
-          { "<leader>dA", function() require('persistent-breakpoints.api').clear_all_breakpoints() end, desc = "Clean Breakpoint" },
-        },
-      } 
     },
 
     keys = {
@@ -107,8 +106,8 @@ return {
       { "<leader>dj", function() require("dap").down() end, desc = "Down" },
       { "<leader>dk", function() require("dap").up() end, desc = "Up" },
       { "<leader>dl", function() require("dap").run_last() end, desc = "Run Last" },
-      { "<leader>do", function() require("dap").step_out() end, desc = "Step Out" },
-      { "<leader>dO", function() require("dap").step_over() end, desc = "Step Over" },
+      { "<leader>dO", function() require("dap").step_out() end, desc = "Step Out" },
+      { "<leader>do", function() require("dap").step_over() end, desc = "Step Over" },
       { "<leader>dp", function() require("dap").pause() end, desc = "Pause" },
       { "<leader>dr", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
       { "<leader>ds", function() require("dap").session() end, desc = "Session" },

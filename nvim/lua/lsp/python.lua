@@ -25,11 +25,14 @@ return {
   },
   {
   "neovim/nvim-lspconfig",
-  opts = {
-    pyright = {
-    },
-    ruff_lsp = {},
-    },
+  opts = function(_, opts)
+    opts.pyright = {
+      on_attach = function(client, bufnr)
+        require("config.handler").on_attach(client, bufnr)
+      end,
+    }
+    opts.ruff_lsp = {}
+    end
   },
   {
     "mfussenegger/nvim-dap",
@@ -48,7 +51,19 @@ return {
   {
     "linux-cultist/venv-selector.nvim",
     cmd = "VenvSelect",
-    opts = {},
-    keys = { { "<leader>cv", "<cmd>:VenvSelect<cr>", desc = "Select VirtualEnv" } },
+    opts = function()
+      local anaconda_base_path = nil;
+      local anaconda_envs_path = nil;
+      if vim.loop.os_uname().sysname == "Darwin" then
+        anaconda_base_path = "/opt/homebrew/Caskroom/miniconda/base";
+        anaconda_envs_path = "/opt/homebrew/Caskroom/miniconda/base/envs";
+      end
+      return {
+        dap_enabled = true,
+        anaconda_base_path = anaconda_base_path,
+        anaconda_envs_path = anaconda_envs_path,
+      }
+    end,
+    keys = { { "<leader>cv", "<CMD>:VenvSelect<CR>", desc = "Select VirtualEnv" } },
   },
 }

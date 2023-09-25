@@ -12,8 +12,8 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      gopls = {
+    opts = function(_, opts)
+      opts.gopls = {
         on_attach = function(client, bufnr)
           require("config.handler").on_attach(client, bufnr)
         end,
@@ -53,9 +53,8 @@ return {
             semanticTokens = true,
           },
         },
-	      
-      },
-    },
+      }
+    end
   },
   {
     "leoluz/nvim-dap-go",

@@ -1,9 +1,13 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      jdtls = {},
-    },
+    opts = function(_, opts)
+      opts.jdtls = {
+        on_attach = function(client, bufnr)
+          require("config.handler").on_attach(client, bufnr)
+        end,
+      }
+    end
   },
   {
     "nvim-treesitter/nvim-treesitter",

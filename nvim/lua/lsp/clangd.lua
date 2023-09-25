@@ -18,7 +18,6 @@ return {
           inline = false,
         },
         ast = {
-          --These require codicons (https://github.com/microsoft/vscode-codicons)
           role_icons = {
             type = "",
             declaration = "",
@@ -41,12 +40,13 @@ return {
     },
   },
 
-  -- Correctly setup lspconfig for clangd 🚀
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      clangd = {
-        on_attach = require("config.handler").on_attach,
+    opts = function(_, opts)
+      opts.clangd = {
+        on_attach = function(client, bufnr)
+          require("config.handler").on_attach(client, bufnr)
+        end,
         root_dir = function(...)
           -- using a root .clang-format or .clang-tidy file messes up projects, so remove them
           return require("lspconfig.util").root_pattern(
@@ -73,8 +73,8 @@ return {
           completeUnimported = true,
           clangdFileStatus = true,
         },
-	    },
-    },
+	    }
+    end
   },
 
   {
@@ -83,11 +83,46 @@ return {
       table.insert(opts.sorting.comparators, 1, require("clangd_extensions.cmp_scores"))
     end,
   },
-
-  {
+    {
     "mfussenegger/nvim-dap",
     optional = true,
-    opts = {},
+    opts = function()
+      local dap = require("dap")
+      if not dap.adapters["codelldb"] then
+        require("dap").adapters["codelldb"] = {
+          type = "server",
+          host = "localhost",
+          port = "${port}",
+          executable = {
+            command = "codelldb",
+            args = {
+              "--port",
+              "${port}",
+            },
+          },
+        }
+      end
+      for _, lang in ipairs({ "c", "cpp" }) do
+        dap.configurations[lang] = {
+          {
+            type = "codelldb",
+            request = "launch",
+            name = "Launch file",
+            program = function()
+              return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+            end,
+            cwd = "${workspaceFolder}",
+          },
+          {
+            type = "codelldb",
+            request = "attach",
+            name = "Attach to process",
+            processId = require("dap.utils").pick_process,
+            cwd = "${workspaceFolder}",
+          },
+        }
+      end
+    end,
   },
   {
     "Civitasv/cmake-tools.nvim",

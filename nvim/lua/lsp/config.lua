@@ -16,51 +16,49 @@ return {
     },
     opts = function(_, opts)
       local schemastore = require("schemastore");
-      return {
-        yamlls = {
-          capabilities = {
-            textDocument = {
-              foldingRange = {
-                dynamicRegistration = false,
-                lineFoldingOnly = true,
-              },
-            },
-          },
-          settings = {
-            redhat = { telemetry = { enabled = false } },
-            yaml = {
-              keyOrdering = false,
-              format = {
-                enable = true,
-              },
-              hover = true,
-              completion = true,
-              validate = true,
-              schemas = schemastore.yaml.schemas {
-                extra = extra,
-              },
-              schemaStore = {
-                enable = false,
-                url = "https://www.schemastore.org/api/json/catalog.json",
-              },
+      opts.yamlls = {
+        capabilities = {
+          textDocument = {
+            foldingRange = {
+              dynamicRegistration = false,
+              lineFoldingOnly = true,
             },
           },
         },
-        jsonls = {
-          settings = {
-            json = {
-              format = {
-                enable = true,
-              },
-              schemas = schemastore.json.schemas {
-                extra = extra,
-              },
-              validate = { enable = true },
+        settings = {
+          redhat = { telemetry = { enabled = false } },
+          yaml = {
+            keyOrdering = false,
+            format = {
+              enable = true,
+            },
+            hover = true,
+            completion = true,
+            validate = true,
+            schemas = schemastore.yaml.schemas {
+              extra = extra,
+            },
+            schemaStore = {
+              enable = false,
+              url = "https://www.schemastore.org/api/json/catalog.json",
             },
           },
-        }
+        },
+      };
+      opts.jsonls = {
+        settings = {
+          json = {
+            format = {
+              enable = true,
+            },
+            schemas = schemastore.json.schemas {
+              extra = extra,
+            },
+            validate = { enable = true },
+          },
+        },
       }
-    end,
+    end
   },
   {
     "nvim-treesitter/nvim-treesitter",
