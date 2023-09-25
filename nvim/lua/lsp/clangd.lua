@@ -83,18 +83,18 @@ return {
       table.insert(opts.sorting.comparators, 1, require("clangd_extensions.cmp_scores"))
     end,
   },
-    {
+  {
     "mfussenegger/nvim-dap",
     optional = true,
     opts = function()
-      local dap = require("dap")
+      local dap = require("dap");
+      local home = os.getenv("HOME");
       if not dap.adapters["codelldb"] then
         require("dap").adapters["codelldb"] = {
           type = "server",
-          host = "localhost",
           port = "${port}",
           executable = {
-            command = "codelldb",
+            command = home .. "/.tools/codelldb/extension/adapter/codelldb",
             args = {
               "--port",
               "${port}",
