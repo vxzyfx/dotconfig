@@ -2,13 +2,22 @@ local handler = require("config.handler")
 return {
   {
     "neovim/nvim-lspconfig",
+    dependencies = {
+      "lvimuser/lsp-inlayhints.nvim",
+      config = function ()
+         require("lsp-inlayhints").setup()
+      end
+    },
     opts = function(_, opts)
       opts.volar = {
 	      on_attach = handler.on_attach,
       }
       opts.tailwindcss = {}
       opts.tsserver = {
-	      on_attach = handler.on_attach,
+	      on_attach = function (client, bufnr)
+          require("lsp-inlayhints").on_attach(client, bufnr);
+          handler.on_attach(client, bufnr);
+	      end,
         keys = {
           { "<leader>co", "<cmd>TypescriptOrganizeImports<CR>", desc = "Organize Imports" },
           { "<leader>cR", "<cmd>TypescriptRenameFile<CR>", desc = "Rename File" },
@@ -20,12 +29,32 @@ return {
               convertTabsToSpaces = vim.o.expandtab,
               tabSize = vim.o.tabstop,
             },
+            inlayHints = {
+              includeInlayEnumMemberValueHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayParameterNameHints = "all",
+              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+            },
           },
           javascript = {
             format = {
               indentSize = vim.o.shiftwidth,
               convertTabsToSpaces = vim.o.expandtab,
               tabSize = vim.o.tabstop,
+            },
+            inlayHints = {
+              includeInlayEnumMemberValueHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayParameterNameHints = "all",
+              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayVariableTypeHintsWhenTypeMatchesName = true,
             },
           },
           completions = {
@@ -97,27 +126,12 @@ return {
     event = "BufRead package.json",
   },
   {
-    "jose-elias-alvarez/typescript.nvim",
-    ft = {
-      "typescript",
-      "typescriptreact",
-      "javascript",
-      "javascriptreact",
-    },
-  },
-  {
-    "dmmulroy/tsc.nvim",
-    cmd = { "TSC" },
-    opts = {},
-  },
-  {
     "mxsdev/nvim-dap-vscode-js",
     dependencies = {
       "mfussenegger/nvim-dap",
       {
         "microsoft/vscode-js-debug",
-        build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out", 
-        
+        build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
       }
     },
     config = function()
@@ -131,24 +145,40 @@ return {
       -- log_file_level = false -- Logging level for output to file. Set to false to disable file logging.
       -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
       });
-      for _, language in ipairs({ "typescript", "javascript" }) do
-        require("dap").configurations[language] = {
-          {
-            type = "pwa-node",
-            request = "launch",
-            name = "Launch file",
-            program = "${file}",
-            cwd = "${workspaceFolder}",
-          },
-          {
-            type = "pwa-chrome",
-            request = "launch",
-            name = "Chrome",
-            program = "${file}",
-            cwd = "${workspaceFolder}",
-          },
-        }
-      end
+      local dap = require("dap");
+      dap.configurations.javascript = {
+        {
+          type = "pwa-node",
+          request = "launch",
+          name = "Launch file",
+          program = "${file}",
+          cwd = "${workspaceFolder}",
+        },
+        {
+          type = "pwa-chrome",
+          request = "launch",
+          name = "Chrome",
+          program = "${file}",
+          cwd = "${workspaceFolder}",
+        },
+      };
+      dap.configurations.typescript = {
+        {
+          type = "pwa-node",
+          request = "launch",
+          name = "Launch file",
+          program = "${file}",
+          cwd = "${workspaceFolder}",
+          runtimeExecutable = "ts-node"
+        },
+        {
+          type = "pwa-chrome",
+          request = "launch",
+          name = "Chrome",
+          program = "${file}",
+          cwd = "${workspaceFolder}",
+        },
+      };
     end,
   },
   {

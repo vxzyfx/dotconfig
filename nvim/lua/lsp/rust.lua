@@ -3,21 +3,22 @@ local on_attach = function(client, bufnr)
   local rt = require("rust-tools")
   local wk = require("which-key")
   wk.register({
-    ["<leader>"] = { rt.code_action_group.code_action_group, "Rust Action" },
+    ["<leader>"] = { function() rt.code_action_group.code_action_group() end, "Rust Action" },
     d = {
-      d = { rt.debuggables.debuggables, "Debug"},
+      c = { function() rt.debuggables.debuggables() end, "Continue"},
     },
     r = {
       name = "rust",
-      h = { rt.hover_actions.hover_actions, "Hover"},
-      o = { rt.inlay_hints.set, "Set inlay hints"},
-      p = { rt.inlay_hints.unset, "Unset inlay hints"},
-      e = { rt.inlay_hints.enable, "Enable inlay hints"},
-      d = { rt.inlay_hints.disable, "Disable inlay hints"},
-      r = { rt.runnables.runnables, "Runable"},
-      m = { rt.expand_macro.expand_macro, "ExpandMacro"},
+      h = { function() rt.hover_actions.hover_actions() end, "Hover"},
+      o = { function() rt.inlay_hints.set() end, "Set inlay hints"},
+      p = { function() rt.inlay_hints.unset() end, "Unset inlay hints"},
+      e = { function() rt.inlay_hints.enable() end, "Enable inlay hints"},
+      d = { function() rt.inlay_hints.disable() end, "Disable inlay hints"},
+      r = { function() rt.runnables.runnables() end, "Runable"},
+      m = { function() rt.expand_macro.expand_macro() end, "ExpandMacro"},
       j = { function() rt.move_item.move_item(false) end, "Move down"},
       k = { function() rt.move_item.move_item(true) end, "Move down"},
+      t = { function() rt.open_cargo_toml.open_cargo_toml() end, "Open Toml"},
     },
   }, { buffer = bufnr, prefix = "<leader>"})
   handler.on_attach(client, bufnr)
@@ -56,11 +57,7 @@ return {
     opts = function()
       return {
         dap = {
-          adapter = {
-            type = "executable",
-            command = "lldb-vscode",
-            name = "rt_lldb",
-          },
+          adapter = require("config.dap").codelldb,
         },
         tools = {
 	        -- executor = require("rust-tools.executors").termopen,

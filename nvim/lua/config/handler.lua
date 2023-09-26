@@ -9,19 +9,6 @@ local function attach_navic(client, bufnr)
   navic.attach(client, bufnr)
 end
 
-local function attach_lsp_signature(client, bufnr)
-  local status_ok, signature = pcall(require, "lsp_signature")
-  if not status_ok then
-    return
-  end
-  signature.on_attach({
-    bind = true, -- This is mandatory, otherwise border config won't get registered.
-      handler_opts = {
-        border = "rounded"
-      }
-    }, bufnr)
-end
-
 local function lsp_keymaps(bufnr)
   local opts = { buffer = bufnr, prefix = "<leader>"}
   local wk = require("which-key")
@@ -48,7 +35,6 @@ end
 M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
   attach_navic(client, bufnr)
-  -- attach_lsp_signature(client, bufnr)
 end
 
 return M

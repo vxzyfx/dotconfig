@@ -88,19 +88,8 @@ return {
     optional = true,
     opts = function()
       local dap = require("dap");
-      local home = os.getenv("HOME");
       if not dap.adapters["codelldb"] then
-        require("dap").adapters["codelldb"] = {
-          type = "server",
-          port = "${port}",
-          executable = {
-            command = home .. "/.tools/codelldb/extension/adapter/codelldb",
-            args = {
-              "--port",
-              "${port}",
-            },
-          },
-        }
+        require("dap").adapters["codelldb"] = require("config.dap").codelldb;
       end
       for _, lang in ipairs({ "c", "cpp" }) do
         dap.configurations[lang] = {
