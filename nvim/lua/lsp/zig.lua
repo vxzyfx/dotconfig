@@ -16,7 +16,13 @@ return {
           request = "launch",
           name = "Launch file",
           program = function()
-            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+            local path = string.match(vim.fn.getcwd(), ".*/(.*)$");
+            if path == nil then
+              path = vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file");
+            else
+              path = vim.fn.getcwd() .. "/zig-out/bin/" .. path;
+            end
+            return path
           end,
           cwd = "${workspaceFolder}",
         },
