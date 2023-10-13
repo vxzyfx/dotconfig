@@ -1,3 +1,4 @@
+local dir = vim.fn.stdpath("data") .. "/lazy/tabby/clients/vim";
 return {
   {
     "neovim/nvim-lspconfig",
@@ -8,6 +9,12 @@ return {
         lspconfig[server].setup(opt)
       end
     end
+  },
+  {
+    "TabbyML/tabby",
+    name = "tabby",
+    enabled = true,
+    dir = dir,
   },
   {
     "nvim-treesitter/nvim-treesitter",
