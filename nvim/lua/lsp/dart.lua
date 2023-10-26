@@ -10,16 +10,12 @@ return {
   {
     "akinsho/flutter-tools.nvim",
     ft = "dart",
-    opts = {
-      debugger = { -- integrate with nvim dap + install dart code debugger
-        enabled = true,
-        run_via_dap = true, -- use dap instead of a plenary job to run flutter apps
-        exception_breakpoints = {},
-        register_configurations = function(paths)
-          local dap = require("dap");
-        end,
-      },
+    lazy = false,
+    dependencies = {
+        'nvim-lua/plenary.nvim',
+        'stevearc/dressing.nvim', -- optional for vim.ui.select
     },
+    config = true,
   },
   -- Add "flutter" extension to "telescope"
   {

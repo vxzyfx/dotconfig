@@ -1,3 +1,23 @@
+local on_attach = function(client, bufnr)
+  local handler = require("config.handler")
+  local wk = require("which-key")
+  wk.register({
+    d = {
+      c = { "<cmd>CMakeDebug<CR>", "Continue"},
+    },
+    r = {
+      name = "cmake",
+      b = { "<cmd>CMakeBuild<CR>", "Build"},
+      r = { "<cmd>CMakeRun<CR>", "Runable"},
+      c = { "<cmd>CMakeClose<CR>", "Close"},
+      w = { "<cmd>CMakeQuickBuild<CR>", "Quick Build"},
+      s = { "<cmd>CMakeQuickRun<CR>", "Quick Run"},
+      d = { "<cmd>CMakeQuickDebug<CR>", "Quick Debug"},
+    },
+  }, { buffer = bufnr, prefix = "<leader>"})
+  handler.on_attach(client, bufnr)
+end
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
@@ -45,7 +65,7 @@ return {
     opts = function(_, opts)
       opts.clangd = {
         on_attach = function(client, bufnr)
-          require("config.handler").on_attach(client, bufnr)
+          on_attach(client, bufnr)
         end,
         root_dir = function(...)
           -- using a root .clang-format or .clang-tidy file messes up projects, so remove them
