@@ -2,9 +2,6 @@ local on_attach = function(client, bufnr)
   local handler = require("config.handler")
   local wk = require("which-key")
   wk.register({
-    d = {
-      c = { "<cmd>CMakeDebug<CR>", "Continue"},
-    },
     r = {
       name = "cmake",
       b = { "<cmd>CMakeBuild<CR>", "Build"},
@@ -108,13 +105,21 @@ return {
     optional = true,
     opts = function()
       local dap = require("dap");
-      if not dap.adapters["codelldb"] then
-        require("dap").adapters["codelldb"] = require("config.dap").codelldb;
+      local gdbcmd = vim.fn.getcwd() .. "/.gdbcmd";
+      local args = { "-i", "dap" };
+      local _, err = io.open(gdbcmd, "r");
+      if not err then
+        vim.list_extend(args, { "-x", gdbcmd });
       end
+      dap.adapters.gdb = {
+        type = "executable",
+        command = "gdb",
+        args = args,
+      }
       for _, lang in ipairs({ "c", "cpp" }) do
         dap.configurations[lang] = {
           {
-            type = "codelldb",
+            type = "gdb",
             request = "launch",
             name = "Launch file",
             program = function()
@@ -123,7 +128,7 @@ return {
             cwd = "${workspaceFolder}",
           },
           {
-            type = "codelldb",
+            type = "gdb",
             request = "attach",
             name = "Attach to process",
             processId = require("dap.utils").pick_process,
@@ -135,7 +140,16 @@ return {
   },
   {
     "Civitasv/cmake-tools.nvim",
-    ft = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
-    opts = {},
+    ft = { "c", "cpp", "objc", "objcpp", "cuda", "proto", "asm" },
+    opts = {
+      cmake_dap_configuration = { -- debug settings for cmake
+        name = "cpp",
+        type = "gdb",
+        request = "launch",
+        stopOnEntry = false,
+        runInTerminal = true,
+        console = "integratedTerminal",
+      },
+    },
   }
 }

@@ -57,7 +57,12 @@ return {
     opts = function()
       return {
         dap = {
-          adapter = require("config.dap").codelldb,
+          adapter = {
+            name = "rt_gdb",
+            type = "executable",
+            command = "gdb",
+            args = { "-i", "dap" },
+          },
         },
         tools = {
 	        -- executor = require("rust-tools.executors").termopen,
