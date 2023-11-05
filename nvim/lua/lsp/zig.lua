@@ -12,7 +12,7 @@ return {
       local dap = require("dap")
       dap.configurations.zig = {
         {
-          type = "codelldb",
+          type = "gdb",
           request = "launch",
           name = "Launch file",
           program = function()
@@ -27,7 +27,7 @@ return {
           cwd = "${workspaceFolder}",
         },
         {
-          type = "codelldb",
+          type = "gdb",
           request = "attach",
           name = "Attach to process",
           processId = require("dap.utils").pick_process,
