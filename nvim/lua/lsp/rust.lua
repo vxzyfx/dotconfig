@@ -55,6 +55,13 @@ return {
     "simrat39/rust-tools.nvim",
     ft = { "rust" },
     opts = function()
+      local cmd;
+      local status_ok, _ = pcall(vim.fn.system, { "rustup", "-v" })
+      if status_ok then
+        cmd = {"rustup", "run", "stable", "rust-analyzer"};
+      else
+        cmd = { "rust-analyzer" }
+      end
       return {
         dap = {
           adapter = {
@@ -89,7 +96,7 @@ return {
         },
         server = {
           on_attach = on_attach,
-          cmd = {"rustup", "run", "stable", "rust-analyzer"},
+          cmd = cmd,
         },
       }
     end

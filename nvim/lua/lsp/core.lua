@@ -11,10 +11,7 @@ return {
     end
   },
   {
-    "TabbyML/tabby",
-    name = "tabby",
-    enabled = true,
-    dir = dir,
+    "TabbyML/vim-tabby",
   },
   {
     "nvim-treesitter/nvim-treesitter",
