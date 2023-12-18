@@ -107,14 +107,16 @@ return {
       local dap = require("dap");
       local gdbcmd = vim.fn.getcwd() .. "/.gdbcmd";
       local args = { "-i", "dap" };
-      local _, err = io.open(gdbcmd, "r");
-      if not err then
-        vim.list_extend(args, { "-x", gdbcmd });
-      end
       dap.adapters.gdb = {
         type = "executable",
         command = "gdb",
         args = args,
+      }
+      local args_cmd = { "-i", "dap", "-x", gdbcmd };
+      dap.adapters.gdb_cmd = {
+        type = "executable",
+        command = "gdb",
+        args = args_cmd,
       }
       for _, lang in ipairs({ "c", "cpp" }) do
         dap.configurations[lang] = {
@@ -122,6 +124,15 @@ return {
             type = "gdb",
             request = "launch",
             name = "Launch file",
+            program = function()
+              return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+            end,
+            cwd = "${workspaceFolder}",
+          },
+          {
+            type = "gdb_cmd",
+            request = "launch",
+            name = "Launch Cmd file",
             program = function()
               return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
             end,

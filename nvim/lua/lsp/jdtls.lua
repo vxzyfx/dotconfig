@@ -9,33 +9,33 @@ return {
       end
     end,
   },
-  {
-    "mfussenegger/nvim-jdtls",
-    config = function()
-      local config = {
-        cmd = {
-          'java', -- or '/path/to/java17_or_newer/bin/java'
-          '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-          '-Dosgi.bundles.defaultStartLevel=4',
-          '-Declipse.product=org.eclipse.jdt.ls.core.product',
-          '-Dlog.protocol=true',
-          '-Dlog.level=ALL',
-          '-Xmx1g',
-          '--add-modules=ALL-SYSTEM',
-          '-jar', jdt_jar,
-          '-configuration', jdt_path .. "/config_linux",
-          '-data', '.cache/jdtls'
-        },
-        root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew', 'build.gradle', 'build.gradle.kts'}),
-        settings = {
-          java = {
-          }
-        },
-        init_options = {
-          bundles = {}
-        },
-      }
-      require('jdtls').start_or_attach(config)
-    end,
-  },
+  -- {
+  --   "mfussenegger/nvim-jdtls",
+  --   config = function()
+  --     local config = {
+  --       cmd = {
+  --         'java', -- or '/path/to/java17_or_newer/bin/java'
+  --         '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+  --         '-Dosgi.bundles.defaultStartLevel=4',
+  --         '-Declipse.product=org.eclipse.jdt.ls.core.product',
+  --         '-Dlog.protocol=true',
+  --         '-Dlog.level=ALL',
+  --         '-Xmx1g',
+  --         '--add-modules=ALL-SYSTEM',
+  --         '-jar', jdt_jar,
+  --         '-configuration', jdt_path .. "/config_linux",
+  --         '-data', '.cache/jdtls'
+  --       },
+  --       root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew', 'build.gradle', 'build.gradle.kts'}),
+  --       settings = {
+  --         java = {
+  --         }
+  --       },
+  --       init_options = {
+  --         bundles = {}
+  --       },
+  --     }
+  --     require('jdtls').start_or_attach(config)
+  --   end,
+  -- },
 }
